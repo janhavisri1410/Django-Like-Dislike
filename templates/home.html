@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Like and Dislike Count</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <div id="like-dislike-buttons">
+        <button
+          type="submit"
+          id="like_button"
+          class="btn btn-success"
+          name="like_button"
+        >
+          Like
+        </button>
+        <button
+          type="submit"
+          id="dislike_button"
+          class="btn btn-danger"
+          name="dislike_button"
+        >
+          Dislike
+        </button>
+      </div>
+      <div id="like-dislike-counts">
+        <p>Likes: <span id="like_count">{{ like }}</span></p>
+        <p>Dislikes: <span id="dislike_count">{{ dislike }}</span></p>
+      </div>
+    </div>
+  </body>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    const flag = document.getElementById("like_button");
+    flag.addEventListener("click", (event) => {
+      fetch("like/", {
+        method: "POST",
+        headers: { "X-CSRFToken": "{{csrf_token}}" },
+      })
+        .then((response) => response.json())
+
+        .then((data) => {
+          document.getElementById("like_count").innerText = data.like;
+          document.getElementById("dislike_count").innerText = data.dislike;
+        });
+    });
+
+    const temp = document.getElementById("dislike_button");
+    temp.addEventListener("click", (event) => {
+      fetch("dislike/", {
+        method: "POST",
+        headers: { "X-CSRFToken": "{{csrf_token}}" },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          document.getElementById("like_count").innerText = data.like;
+          document.getElementById("dislike_count").innerText = data.dislike;
+        });
+    });
+  </script>
+</html>
